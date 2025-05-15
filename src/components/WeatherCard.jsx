@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useWeatherHistory } from '../hooks/useWeatherHistory';
 
 // 添加中文城市名映射
 const cityNameMap = {
@@ -25,6 +26,7 @@ const WeatherCard = ({ city }) => {
   const [weatherData, setWeatherData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const { addToHistory, history } = useWeatherHistory();
 
   // 获取当前日期
   const getCurrentDate = () => {
@@ -51,9 +53,15 @@ const WeatherCard = ({ city }) => {
         }
         return response.json();
       })
-      .then(data => setWeatherData(data))
+      .then(data => {
+        setWeatherData(data);
+        // 在成功获取天气数据后保存城市到历史记录
+        addToHistory(city);
+        console.log("历史记录:", history);
+      })
       .catch(err => setError(err.message))
       .finally(() => setLoading(false));
+
   }, [city]);
 
   if (loading) {
