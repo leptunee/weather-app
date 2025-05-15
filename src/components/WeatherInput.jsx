@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { pinyin } from "pinyin-pro";
 
-function WeatherInput({ onSearch, searchHistory }) {
+function WeatherInput({ onSearch, searchHistory, onClearHistory }) {
   const [city, setCity] = useState("");
   const [suggestions, setSuggestions] = useState([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
@@ -130,10 +130,10 @@ function WeatherInput({ onSearch, searchHistory }) {
               <div className="flex justify-between items-center px-4 py-2 border-b border-gray-200 dark:border-gray-700">
                 <span className="text-sm text-gray-500 dark:text-gray-400">搜索历史</span>
                 <button
-                  type="button"
-                  onClick={(e) => {
+                  type="button"                  onClick={(e) => {
                     e.preventDefault();
-                    clearHistory();
+                    onClearHistory();
+                    setSuggestions([]);
                     setShowSuggestions(false);
                   }}
                   className="text-sm text-blue-500 hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-300"
