@@ -1,6 +1,26 @@
 import { useState, useEffect, useRef } from "react";
 import { pinyin } from "pinyin-pro";
 
+// 特殊城市中文到英文名映射
+const SPECIAL_CITY_MAP = {
+  '哈尔滨': 'harbin',
+  '喀什': 'kashgar', 
+  '鄂尔多斯': 'ordos',
+  '乌鲁木齐': 'urumqi',
+  '呼和浩特': 'hohhot',
+  '拉萨': 'lhasa',
+  '齐齐哈尔': 'qiqihar',
+  '台北': 'taipei',
+  '高雄': 'kaohsiung',
+  '基隆': 'keelung',
+  '台中': 'taichung',
+  '花莲': 'hualien',
+  '台南': 'tainan',
+  '嘉义': 'chiayi',
+  '香港': 'hongkong',
+  '澳门': 'macau'
+};
+
 function WeatherInput({ onSearch, searchHistory, onClearHistory }) {
   const [city, setCity] = useState("");
   const [suggestions, setSuggestions] = useState([]);
@@ -94,13 +114,20 @@ function WeatherInput({ onSearch, searchHistory, onClearHistory }) {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (city.trim()) {
-      // 将输入的中文转换为拼音（不带声调）
-      const cityPinyin = pinyin(city.trim(), {
-        toneType: 'none',
-        type: 'array'
-      }).join('');
+      const cityName = city.trim();
       
-      onSearch(cityPinyin);
+      // 先检查是否是特殊城市
+      let searchTerm = SPECIAL_CITY_MAP[cityName];
+      
+      // 如果不是特殊城市，则使用拼音转换
+      if (!searchTerm) {
+        searchTerm = pinyin(cityName, {
+          toneType: 'none',
+          type: 'array'
+        }).join('');
+      }
+      
+      onSearch(searchTerm);
       setCity("");
       setShowSuggestions(false);
     }
