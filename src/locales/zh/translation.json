@@ -8,5 +8,24 @@
   "humidity": "湿度",
   "wind_speed": "风速",
   "search_history": "搜索历史",
-  "clear_history": "清除历史记录"
+  "clear_history": "清除历史记录",
+  "cities": {
+    "beijing": "北京",
+    "shanghai": "上海",
+    "guangzhou": "广州",
+    "shenzhen": "深圳",
+    "hangzhou": "杭州",
+    "chengdu": "成都",
+    "nanjing": "南京",
+    "wuhan": "武汉",
+    "xian": "西安",
+    "tianjin": "天津",
+    "chongqing": "重庆",
+    "suzhou": "苏州",
+    "qingdao": "青岛",
+    "dalian": "大连",
+    "xiamen": "厦门",
+    "shenyang": "沈阳",
+    "changsha": "长沙"
+  }
 }

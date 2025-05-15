@@ -8,5 +8,24 @@
   "humidity": "Humidity",
   "wind_speed": "Wind Speed",
   "search_history": "Search History",
-  "clear_history": "Clear History"
+  "clear_history": "Clear History",
+  "cities": {
+    "beijing": "Beijing",
+    "shanghai": "Shanghai",
+    "guangzhou": "Guangzhou",
+    "shenzhen": "Shenzhen",
+    "hangzhou": "Hangzhou",
+    "chengdu": "Chengdu",
+    "nanjing": "Nanjing",
+    "wuhan": "Wuhan",
+    "xian": "Xi'an",
+    "tianjin": "Tianjin",
+    "chongqing": "Chongqing",
+    "suzhou": "Suzhou",
+    "qingdao": "Qingdao",
+    "dalian": "Dalian",
+    "xiamen": "Xiamen",
+    "shenyang": "Shenyang",
+    "changsha": "Changsha"
+  }
 }

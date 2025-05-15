@@ -2,27 +2,6 @@ import React, { useState, useEffect } from "react";
 import { useWeatherHistory } from '../hooks/useWeatherHistory';
 import { useTranslation } from 'react-i18next';
 
-// 添加中文城市名映射
-const cityNameMap = {
-  'beijing': '北京',
-  'shanghai': '上海',
-  'guangzhou': '广州',
-  'shenzhen': '深圳',
-  'hangzhou': '杭州',
-  'chengdu': '成都',
-  'nanjing': '南京',
-  'wuhan': '武汉',
-  'xian': '西安',
-  'tianjin': '天津',
-  'chongqing': '重庆',
-  'suzhou': '苏州',
-  'qingdao': '青岛',
-  'dalian': '大连',
-  'xiamen': '厦门',
-  'shenyang': '沈阳',
-  'changsha': '长沙'
-};
-
 const WeatherCard = ({ city }) => {
   const [weatherData, setWeatherData] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -89,14 +68,25 @@ const WeatherCard = ({ city }) => {
 
   const { name, main: { temp, humidity }, weather: [{ description, icon }], wind: { speed } } = weatherData;
   
-  // 获取中文城市名，如果映射中没有则使用 API 返回的名称
-  const cityNameChinese = cityNameMap[city.toLowerCase()] || name;
+  // 获取城市的翻译名称
+  const getCityDisplayName = (cityName) => {
+    const lowercaseCity = cityName.toLowerCase();
+    // 尝试从翻译文件获取城市名
+    const translatedName = t(`cities.${lowercaseCity}`, { defaultValue: '' });
+    if (translatedName) {
+      return translatedName;
+    }
+    // 如果翻译文件中没有对应的翻译，则使用 API 返回的城市名
+    return name;
+  };
+
+  const cityDisplayName = getCityDisplayName(city);
 
   return (
     <div className="bg-white/30 dark:bg-white/10 backdrop-blur p-6 rounded-xl shadow-lg">
       <div className="flex items-center justify-between mb-4">
         <div>
-          <h2 className="text-xl font-semibold text-gray-800 dark:text-white">{cityNameChinese}</h2>
+          <h2 className="text-xl font-semibold text-gray-800 dark:text-white">{cityDisplayName}</h2>
           <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">{getCurrentDate()}</p>
         </div>
         <div className="bg-white dark:bg-white/20 p-1 rounded-full shadow-md">
