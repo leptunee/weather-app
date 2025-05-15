@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useWeatherHistory } from '../hooks/useWeatherHistory';
+import { useTranslation } from 'react-i18next';
 
 // 添加中文城市名映射
 const cityNameMap = {
@@ -27,6 +28,7 @@ const WeatherCard = ({ city }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const { addToHistory, history } = useWeatherHistory();
+  const { t, i18n } = useTranslation();
 
   // 获取当前日期
   const getCurrentDate = () => {
@@ -37,7 +39,7 @@ const WeatherCard = ({ city }) => {
       day: 'numeric', 
       weekday: 'long'
     };
-    return now.toLocaleDateString('zh-CN', options);
+    return now.toLocaleDateString(i18n.language === 'zh' ? 'zh-CN' : 'en-US', options);
   };
 
   useEffect(() => {
@@ -46,10 +48,10 @@ const WeatherCard = ({ city }) => {
     setLoading(true);
     setError(null);
     
-    fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=d9248032030562dee7f8a5c9500ae2ab&units=metric&lang=zh_cn`)
+    fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=d9248032030562dee7f8a5c9500ae2ab&units=metric&lang=${i18n.language === 'zh' ? 'zh_cn' : 'en'}`)
       .then(response => {
         if (!response.ok) {
-          throw new Error('城市未找到');
+          throw new Error(t('error_not_found'));
         }
         return response.json();
       })
@@ -62,7 +64,7 @@ const WeatherCard = ({ city }) => {
       .catch(err => setError(err.message))
       .finally(() => setLoading(false));
 
-  }, [city]);
+  }, [city, i18n.language, t, addToHistory]);
 
   if (loading) {
     return (
@@ -70,6 +72,7 @@ const WeatherCard = ({ city }) => {
         <div className="h-6 bg-gray-200 dark:bg-gray-700 rounded w-2/3 mb-4"></div>
         <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-1/2 mb-2"></div>
         <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-1/3"></div>
+        <p className="text-center text-gray-600 dark:text-gray-400">{t('loading')}</p>
       </div>
     );
   }
@@ -77,7 +80,7 @@ const WeatherCard = ({ city }) => {
   if (error) {
     return (
       <div className="bg-red-100 dark:bg-red-900/30 backdrop-blur p-6 rounded-xl shadow-lg">
-        <p className="text-red-600 dark:text-red-400">{error}</p>
+        <p className="text-red-600 dark:text-red-400">{t('error_not_found')}</p>
       </div>
     );
   }
@@ -108,8 +111,8 @@ const WeatherCard = ({ city }) => {
         <p className="text-3xl font-bold text-gray-800 dark:text-white">{temp.toFixed(1)}°C</p>
         <p className="text-gray-600 dark:text-gray-300">{description}</p>
         <div className="grid grid-cols-2 gap-2 text-sm text-gray-600 dark:text-gray-400">
-          <p>湿度：{humidity}%</p>
-          <p>风速：{speed} m/s</p>
+          <p>{t('humidity')}：{humidity}%</p>
+          <p>{t('wind_speed')}：{speed} m/s</p>
         </div>
       </div>
     </div>

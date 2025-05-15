@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { pinyin } from "pinyin-pro";
+import { useTranslation } from 'react-i18next';
 
 // 特殊城市中文到英文名映射
 const SPECIAL_CITY_MAP = {
@@ -28,6 +29,7 @@ function WeatherInput({ onSearch, searchHistory, onClearHistory }) {
   const [selectedIndex, setSelectedIndex] = useState(-1); // 添加选中项索引状态
   const inputRef = useRef(null);
   const suggestionsRef = useRef(null);
+  const { t } = useTranslation();
 
   // 处理键盘事件
   const handleKeyDown = (e) => {
@@ -144,7 +146,7 @@ function WeatherInput({ onSearch, searchHistory, onClearHistory }) {
             onChange={handleInputChange}
             onKeyDown={handleKeyDown}
             onClick={handleInputClick}
-            placeholder="请输入城市名（支持中文）"
+            placeholder={t('search_placeholder')}
             className="w-full px-4 py-2 rounded-xl bg-white/60 dark:bg-white/10 backdrop-blur border border-gray-300 dark:border-white/20 text-gray-800 dark:text-white"
           />
           
@@ -155,9 +157,10 @@ function WeatherInput({ onSearch, searchHistory, onClearHistory }) {
               className="absolute z-10 w-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg mt-1"
             >
               <div className="flex justify-between items-center px-4 py-2 border-b border-gray-200 dark:border-gray-700">
-                <span className="text-sm text-gray-500 dark:text-gray-400">搜索历史</span>
+                <span className="text-sm text-gray-500 dark:text-gray-400">{t('search_history')}</span>
                 <button
-                  type="button"                  onClick={(e) => {
+                  type="button"
+                  onClick={(e) => {
                     e.preventDefault();
                     onClearHistory();
                     setSuggestions([]);
@@ -165,7 +168,7 @@ function WeatherInput({ onSearch, searchHistory, onClearHistory }) {
                   }}
                   className="text-sm text-blue-500 hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-300"
                 >
-                  清除历史记录
+                  {t('clear_history')}
                 </button>
               </div>
               {suggestions.map((suggestion, index) => (
@@ -188,7 +191,7 @@ function WeatherInput({ onSearch, searchHistory, onClearHistory }) {
           type="submit"
           className="px-4 py-2 bg-blue-500 text-white rounded-xl hover:bg-blue-600 transition"
         >
-          查询
+          {t('search_button')}
         </button>
       </div>
     </form>

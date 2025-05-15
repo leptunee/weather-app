@@ -1,0 +1,12 @@
+{
+  "app_title": "Weather App",
+  "search_placeholder": "Enter a city...",
+  "search_button": "Search",
+  "loading": "Loading...",
+  "error_not_found": "City not found",
+  "temperature": "Temperature",
+  "humidity": "Humidity",
+  "wind_speed": "Wind Speed",
+  "search_history": "Search History",
+  "clear_history": "Clear History"
+}

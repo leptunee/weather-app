@@ -1,0 +1,12 @@
+{
+  "app_title": "天气查询",
+  "search_placeholder": "请输入城市名（国内城市支持中文）",
+  "search_button": "查询",
+  "loading": "加载中...",
+  "error_not_found": "未找到该城市",
+  "temperature": "温度",
+  "humidity": "湿度",
+  "wind_speed": "风速",
+  "search_history": "搜索历史",
+  "clear_history": "清除历史记录"
+}
