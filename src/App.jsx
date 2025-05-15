@@ -4,10 +4,11 @@ import WeatherCard from "./components/WeatherCard";
 import { useWeatherHistory } from './hooks/useWeatherHistory';
 
 function App() {  const [city, setCity] = useState("");
-  const { history, clearHistory } = useWeatherHistory();
+  const { history, addToHistory, clearHistory } = useWeatherHistory();
 
   const handleSearch = (input) => {
     setCity(input);
+    addToHistory(input);
   };
 
   const handleClearHistory = () => {
