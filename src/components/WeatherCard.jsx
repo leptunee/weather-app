@@ -80,9 +80,20 @@ const WeatherCard = ({ city, coords, favorites = [], onToggleFavorite }) => {
       </div>
     );
   }
-
   if (!weatherData) return null;
-  const { name, main: { temp, humidity }, weather: [{ description, icon }], wind: { speed } } = weatherData;
+  const { 
+    name, 
+    main: { temp, humidity }, 
+    weather: [{ description, icon }], 
+    wind: { speed },
+    sys: { sunrise, sunset }
+  } = weatherData;
+  
+  // 判断当前是否是夜间
+  const isNight = () => {
+    const currentTime = Math.floor(Date.now() / 1000); // 转换为 Unix 时间戳（秒）
+    return currentTime < sunrise || currentTime > sunset;
+  };
   
   // 获取城市显示名称
   const getCityDisplayName = (cityName) => {
@@ -96,14 +107,21 @@ const WeatherCard = ({ city, coords, favorites = [], onToggleFavorite }) => {
   const isFavorite = favorites?.some(f => f.name === name);
 
   const cityDisplayName = getCityDisplayName(city);
+  const nightModeClass = isNight() 
+    ? 'bg-gray-900/40 text-gray-100' 
+    : 'bg-white/30 dark:bg-white/10 text-gray-800 dark:text-white';
 
   return (
-    <div className="bg-white/30 dark:bg-white/10 backdrop-blur p-6 rounded-xl shadow-lg">      <div className="flex items-center justify-between mb-4">
-        <div className="flex items-start gap-2">
-          <div>
-            <h2 className="text-xl font-semibold text-gray-800 dark:text-white">{cityDisplayName}</h2>
-            <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">{getCurrentDate()}</p>
-          </div>          <button
+    <div className={`${nightModeClass} backdrop-blur p-6 rounded-xl shadow-lg transition-colors duration-300`}>      
+      <div className="flex items-center justify-between mb-4">
+        <div className="flex items-start gap-2">          <div>
+            <h2 className={`text-xl font-semibold ${isNight() ? 'text-white' : 'text-gray-800 dark:text-white'}`}>
+              {cityDisplayName}
+            </h2>
+            <p className={`text-sm mt-1 ${isNight() ? 'text-gray-300' : 'text-gray-600 dark:text-gray-400'}`}>
+              {getCurrentDate()}
+            </p>
+          </div><button
             onClick={() => onToggleFavorite?.({
               name,
               temp,
@@ -138,11 +156,14 @@ const WeatherCard = ({ city, coords, favorites = [], onToggleFavorite }) => {
             className="w-14 h-14"
           />
         </div>
-      </div>
-      <div className="space-y-2">
-        <p className="text-3xl font-bold text-gray-800 dark:text-white">{temp.toFixed(1)}°C</p>
-        <p className="text-gray-600 dark:text-gray-300">{description}</p>
-        <div className="grid grid-cols-2 gap-2 text-sm text-gray-600 dark:text-gray-400">
+      </div>      <div className="space-y-2">
+        <p className={`text-3xl font-bold ${isNight() ? 'text-white' : 'text-gray-800 dark:text-white'}`}>
+          {temp.toFixed(1)}°C
+        </p>
+        <p className={`${isNight() ? 'text-gray-300' : 'text-gray-600 dark:text-gray-300'}`}>
+          {description}
+        </p>
+        <div className={`grid grid-cols-2 gap-2 text-sm ${isNight() ? 'text-gray-300' : 'text-gray-600 dark:text-gray-400'}`}>
           <p>{t('humidity')}: {humidity}%</p>
           <p>{t('wind_speed')}: {speed} m/s</p>
         </div>
