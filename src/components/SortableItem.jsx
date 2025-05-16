@@ -68,14 +68,15 @@ export function SortableItem({ id, city, onSelect, onRemove, t }) {
         
         {/* 天气信息区域 */}
         <div>
-          <div className="flex items-center">
+          <div className="flex items-center gap-2">
             <img 
-              src={`https://openweathermap.org/img/wn/${city.icon}.png`}
+              src={`https://openweathermap.org/img/wn/${city.icon}@2x.png`}
               alt={city.description}
-              className="w-8 h-8 -ml-1"
+              className="w-10 h-10 -ml-1 weather-icon-small"
+              loading="lazy"
             />
             <span className="text-lg font-semibold text-gray-900 dark:text-white">
-              {city.temp?.toFixed(1)}°C
+              {typeof city.temp === 'number' ? city.temp.toFixed(1) : '--'}°C
             </span>
           </div>
           {city.timestamp && (

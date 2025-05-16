@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useTranslation } from 'react-i18next';
 import WeatherInput from "./components/WeatherInput";
 import WeatherCard from "./components/WeatherCard";
@@ -14,7 +14,7 @@ function App() {
   const [coords, setCoords] = useState(null);
   const { history, addToHistory, clearHistory } = useWeatherHistory();
   const { favorites, addFavorite, removeFavorite, updateFavorite, reorderFavorites } = useFavorites();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const handleSearch = (input) => {
     setCity(input);
@@ -30,6 +30,46 @@ function App() {
   const handleClearHistory = () => {
     clearHistory();
   };
+
+  // 自动更新收藏城市的天气数据
+  useEffect(() => {
+    const updateFavoriteWeather = async (cityName) => {
+      try {
+        const baseUrl = 'https://api.openweathermap.org/data/2.5/weather';
+        const params = new URLSearchParams({
+          q: cityName,
+          appid: 'd9248032030562dee7f8a5c9500ae2ab',
+          units: 'metric',
+          lang: i18n.language === 'zh' ? 'zh_cn' : 'en'
+        });
+
+        const response = await fetch(`${baseUrl}?${params.toString()}`);
+        if (!response.ok) return;
+        
+        const data = await response.json();
+        updateFavorite(cityName, {
+          temp: data.main.temp,
+          description: data.weather[0].description,
+          icon: data.weather[0].icon,
+          timestamp: Date.now()
+        });
+      } catch (error) {
+        console.error(`Failed to update weather for ${cityName}:`, error);
+      }
+    };
+
+    // 每5分钟更新一次收藏城市的天气
+    const updateAllFavorites = () => {
+      favorites.forEach(city => updateFavoriteWeather(city.name));
+    };
+
+    // 初始更新
+    updateAllFavorites();
+
+    // 设置定时更新
+    const intervalId = setInterval(updateAllFavorites, 300000);
+    return () => clearInterval(intervalId);
+  }, [favorites.length, i18n.language, updateFavorite]);
 
   return (
     <div className="min-h-screen relative bg-bg-primary dark:bg-bg-secondary">

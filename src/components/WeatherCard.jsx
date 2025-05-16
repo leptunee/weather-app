@@ -98,7 +98,13 @@ const WeatherCard = ({ city, coords, favorites = [], onToggleFavorite }) => {
                 {weatherData.name}
               </h2>
               <button
-                onClick={() => onToggleFavorite(weatherData)}
+                onClick={() => onToggleFavorite({
+                  name: weatherData.name,
+                  temp: weatherData.main.temp,
+                  description: weatherData.weather[0].description,
+                  icon: weatherData.weather[0].icon,
+                  timestamp: Date.now()
+                })}
                 className="mt-1"
                 title={isFavorite ? t('remove_from_favorites') : t('add_to_favorites')}
               >
@@ -149,8 +155,7 @@ const WeatherCard = ({ city, coords, favorites = [], onToggleFavorite }) => {
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-blue-500" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 22c4.97 0 9-3.657 9-8.167C21 7.654 12 2 12 2S3 7.654 3 13.833C3 18.343 7.03 22 12 22z" />
                   </svg>
-                </div>
-                <span className="text-lg font-medium">{weatherData.main.humidity}%</span>
+                </div>                <span className="text-lg font-medium text-text-primary">{weatherData.main.humidity}%</span>
               </div>
 
               {/* 风速 */}
@@ -160,20 +165,25 @@ const WeatherCard = ({ city, coords, favorites = [], onToggleFavorite }) => {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.59 4.59A2 2 0 1111 8H2m10.59 11.41A2 2 0 1014 16H2m15.73-8.27A2.5 2.5 0 1119.5 12H2" />
                   </svg>
                 </div>
-                <span className="text-lg font-medium">{Math.round(weatherData.wind.speed)}<span className="text-sm ml-1">m/s</span></span>
+                <span className="text-lg font-medium text-text-primary">
+                  {Math.round(weatherData.wind.speed)}<span className="text-sm ml-1 text-text-secondary">m/s</span>
+                </span>
               </div>
 
               {/* 气压 */}
-              <div className="flex items-center gap-2">
-                <div className="rounded-full p-2 bg-violet-500/10 dark:bg-violet-500/20">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-violet-500" viewBox="0 0 24 24" fill="none">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} stroke="currentColor" 
-                      d="M12 4v2m0 12v2M4 12h2m12 0h2m-3.172-6.828l1.414-1.414M7.758 16.242l1.414-1.414m0-9.656L7.758 3.758M16.242 16.242l1.414 1.414M12 15a3 3 0 100-6 3 3 0 000 6z" />
+              <div className="flex items-center gap-2">                <div className="rounded-full p-2 bg-violet-500/10 dark:bg-violet-500/20">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-violet-500" viewBox="0 0 24 24">
+                    <mask id="pointer">
+                      <rect x="0" y="0" width="24" height="24" fill="white" />
+                      <path d="M12 12L15 9" stroke="black" strokeWidth="2" strokeLinecap="round" />
+                    </mask>
+                    <circle cx="12" cy="12" r="9" strokeWidth="2" stroke="currentColor" fill="none"/>
+                    <circle cx="12" cy="12" r="6" stroke="none" fill="currentColor" mask="url(#pointer)"/>
                   </svg>
                 </div>
-                <div className="text-lg font-medium leading-none">
+                <div className="text-lg font-medium leading-none text-text-primary">
                   {Math.round(weatherData.main.pressure)}
-                  <span className="text-sm ml-1">hPa</span>
+                  <span className="text-sm ml-1 text-text-secondary">hPa</span>
                 </div>
               </div>
             </div>

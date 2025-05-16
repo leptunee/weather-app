@@ -65,20 +65,24 @@ export function useFavorites() {
   // 更新收藏城市的数据
   const updateFavorite = useCallback((cityName, newData) => {
     setFavorites(prev => {
-      const newFavorites = prev.map(city => 
-        city.name === cityName 
-          ? { ...city, ...newData, timestamp: Date.now() }
-          : city
-      );
+      const index = prev.findIndex(city => city.name === cityName);
+      if (index === -1) return prev;
+
+      const updatedFavorites = [...prev];
+      updatedFavorites[index] = {
+        ...prev[index],
+        ...newData,
+        timestamp: Date.now()
+      };
 
       // 保存到 localStorage
       try {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(newFavorites));
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(updatedFavorites));
       } catch (error) {
         console.error('Failed to save favorites to localStorage:', error);
       }
 
-      return newFavorites;
+      return updatedFavorites;
     });
   }, []);
 
