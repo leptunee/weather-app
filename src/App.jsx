@@ -80,8 +80,7 @@ function App() {
       </div>
       
       <div className="min-h-screen flex items-center justify-center p-6">
-        <div className="card w-full max-w-md">
-          <h1 className="text-2xl font-bold text-center gradient-text mb-6">
+        <div className="card w-full max-w-md">          <h1 className="text-2xl font-bold text-center text-sky-600 dark:text-sky-300 mb-6">
             {t('app_title')}
           </h1>
           <WeatherInput 

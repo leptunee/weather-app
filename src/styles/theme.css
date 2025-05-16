@@ -129,17 +129,6 @@
     --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(2px + var(--tw-ring-offset-width)) rgb(56 189 248 / 0.5);
     box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow);
   }
-
-  .gradient-text {
-    background-image: linear-gradient(to right, rgb(2 132 199), rgb(56 189 248));
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-  }
-
-  .dark .gradient-text {
-    background-image: linear-gradient(to right, rgb(56 189 248), rgb(186 230 253));
-  }
   .dropdown {
     position: absolute;
     z-index: 10;

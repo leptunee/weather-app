@@ -93,8 +93,7 @@ const WeatherCard = ({ city, coords, favorites = [], onToggleFavorite }) => {
       ) : weatherData && (
         <>
           <div className="flex justify-between items-start">
-            <div className="flex items-start gap-2">
-              <h2 className="text-2xl font-bold gradient-text">
+            <div className="flex items-start gap-2">              <h2 className="text-2xl font-bold text-sky-600 dark:text-sky-300">
                 {weatherData.name}
               </h2>
               <button
@@ -137,8 +136,7 @@ const WeatherCard = ({ city, coords, favorites = [], onToggleFavorite }) => {
                 alt={weatherData.weather[0].description}
                 className="w-20 h-20"
               />
-              <div>
-                <div className="text-4xl font-bold gradient-text">
+              <div>                <div className="text-4xl font-bold text-sky-600 dark:text-sky-300">
                   {Math.round(weatherData.main.temp)}°
                 </div>
                 <div className="text-text-secondary capitalize">
