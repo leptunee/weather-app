@@ -2,11 +2,11 @@ import React, { useState, useEffect } from "react";
 import { useWeatherHistory } from '../hooks/useWeatherHistory';
 import { useTranslation } from 'react-i18next';
 
-const WeatherCard = ({ city }) => {
+const WeatherCard = ({ city, coords }) => {
   const [weatherData, setWeatherData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const { addToHistory, history } = useWeatherHistory();
+  const { addToHistory } = useWeatherHistory();
   const { t, i18n } = useTranslation();
 
   // 获取当前日期
@@ -22,12 +22,29 @@ const WeatherCard = ({ city }) => {
   };
 
   useEffect(() => {
-    if (!city) return;
+    if (!city && !coords) return;
     
     setLoading(true);
     setError(null);
     
-    fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=d9248032030562dee7f8a5c9500ae2ab&units=metric&lang=${i18n.language === 'zh' ? 'zh_cn' : 'en'}`)
+    // 构建 API URL
+    const baseUrl = 'https://api.openweathermap.org/data/2.5/weather';
+    const params = new URLSearchParams({
+      appid: 'd9248032030562dee7f8a5c9500ae2ab',
+      units: 'metric',
+      lang: i18n.language === 'zh' ? 'zh_cn' : 'en'
+    });
+
+    if (city) {
+      params.append('q', city);
+    } else if (coords) {
+      params.append('lat', coords.latitude);
+      params.append('lon', coords.longitude);
+    }
+
+    const apiUrl = `${baseUrl}?${params.toString()}`;
+    
+    fetch(apiUrl)
       .then(response => {
         if (!response.ok) {
           throw new Error(t('error_not_found'));
@@ -36,14 +53,14 @@ const WeatherCard = ({ city }) => {
       })
       .then(data => {
         setWeatherData(data);
-        // 在成功获取天气数据后保存城市到历史记录
-        addToHistory(city);
-        console.log("历史记录:", history);
+        if (city) {
+          addToHistory(city);
+        }
       })
       .catch(err => setError(err.message))
       .finally(() => setLoading(false));
 
-  }, [city, i18n.language, t, addToHistory]);
+  }, [city, coords, i18n.language, t, addToHistory]);
 
   if (loading) {
     return (
@@ -68,16 +85,12 @@ const WeatherCard = ({ city }) => {
 
   const { name, main: { temp, humidity }, weather: [{ description, icon }], wind: { speed } } = weatherData;
   
-  // 获取城市的翻译名称
+  // 获取城市显示名称
   const getCityDisplayName = (cityName) => {
+    if (!cityName) return name;
     const lowercaseCity = cityName.toLowerCase();
-    // 尝试从翻译文件获取城市名
     const translatedName = t(`cities.${lowercaseCity}`, { defaultValue: '' });
-    if (translatedName) {
-      return translatedName;
-    }
-    // 如果翻译文件中没有对应的翻译，则使用 API 返回的城市名
-    return name;
+    return translatedName || name;
   };
 
   const cityDisplayName = getCityDisplayName(city);
@@ -101,8 +114,8 @@ const WeatherCard = ({ city }) => {
         <p className="text-3xl font-bold text-gray-800 dark:text-white">{temp.toFixed(1)}°C</p>
         <p className="text-gray-600 dark:text-gray-300">{description}</p>
         <div className="grid grid-cols-2 gap-2 text-sm text-gray-600 dark:text-gray-400">
-          <p>{t('humidity')}：{humidity}%</p>
-          <p>{t('wind_speed')}：{speed} m/s</p>
+          <p>{t('humidity')}: {humidity}%</p>
+          <p>{t('wind_speed')}: {speed} m/s</p>
         </div>
       </div>
     </div>

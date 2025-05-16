@@ -9,6 +9,13 @@
   "wind_speed": "Wind Speed",
   "search_history": "Search History",
   "clear_history": "Clear History",
+  "location": {
+    "button": "Get Current Location Weather",
+    "requesting": "Getting location...",
+    "permission_needed": "Location permission required",
+    "error": "Unable to get location",
+    "not_supported": "Geolocation is not supported by your browser"
+  },
   "cities": {
     "beijing": "Beijing",
     "shanghai": "Shanghai",
