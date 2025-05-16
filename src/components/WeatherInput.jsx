@@ -145,9 +145,11 @@ function WeatherInput({ onSearch, searchHistory, onClearHistory }) {
             value={city}
             onChange={handleInputChange}
             onKeyDown={handleKeyDown}
-            onClick={handleInputClick}
+            onClick={handleInputClick}            
             placeholder={t('search_placeholder')}
-            className="w-full px-4 py-2 rounded-xl bg-white/60 dark:bg-white/10 backdrop-blur border border-gray-300 dark:border-white/20 text-gray-800 dark:text-white"
+            className="w-full h-12 px-4 rounded-xl bg-white/60 dark:bg-white/10 backdrop-blur 
+                     border border-gray-300 dark:border-white/20 text-gray-800 dark:text-white
+                     focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
           />
           
           {/* 搜索建议下拉框 */}
@@ -189,9 +191,26 @@ function WeatherInput({ onSearch, searchHistory, onClearHistory }) {
         </div>
         <button
           type="submit"
-          className="px-4 py-2 bg-blue-500 text-white rounded-xl hover:bg-blue-600 transition"
+          className="group p-3 bg-white/80 dark:bg-gray-800/80 backdrop-blur
+                   hover:bg-white dark:hover:bg-gray-700 text-blue-600 dark:text-blue-400 rounded-full
+                   transition-all duration-300 ease-in-out transform hover:scale-110
+                   shadow-lg hover:shadow-xl active:scale-95
+                   border border-blue-100 dark:border-blue-900"
+          title={t('search_button')}
         >
-          {t('search_button')}
+          <div className="w-6 h-6 flex items-center justify-center group-hover:animate-pulse">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              strokeWidth="2.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="w-5 h-5 stroke-current"
+            >
+              <path d="M21 21l-4.35-4.35" />
+              <circle cx="11" cy="11" r="8" />
+            </svg>
+          </div>
         </button>
       </div>
     </form>
