@@ -12,7 +12,7 @@ function App() {
   const [city, setCity] = useState("");
   const [coords, setCoords] = useState(null);
   const { history, addToHistory, clearHistory } = useWeatherHistory();
-  const { favorites, addFavorite, removeFavorite, updateFavorite } = useFavorites();
+  const { favorites, addFavorite, removeFavorite, updateFavorite, reorderFavorites } = useFavorites();
   const { t } = useTranslation();
 
   const handleSearch = (input) => {
@@ -51,6 +51,7 @@ function App() {
             favorites={favorites}
             onSelect={handleSearch}
             onRemove={removeFavorite}
+            onReorder={reorderFavorites}
           />
           {(city || coords) && (
             <WeatherCard 

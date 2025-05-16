@@ -82,10 +82,29 @@ export function useFavorites() {
     });
   }, []);
 
+  // 重新排序收藏城市
+  const reorderFavorites = useCallback((oldIndex, newIndex) => {
+    setFavorites(prev => {
+      const newFavorites = [...prev];
+      const [movedItem] = newFavorites.splice(oldIndex, 1);
+      newFavorites.splice(newIndex, 0, movedItem);
+
+      // 保存到 localStorage
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(newFavorites));
+      } catch (error) {
+        console.error('Failed to save favorites to localStorage:', error);
+      }
+
+      return newFavorites;
+    });
+  }, []);
+
   return {
     favorites,
     addFavorite,
     removeFavorite,
-    updateFavorite
+    updateFavorite,
+    reorderFavorites
   };
 }
