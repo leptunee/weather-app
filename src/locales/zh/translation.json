@@ -12,6 +12,8 @@
   "wind_speed": "风速",
   "search_history": "搜索历史",
   "clear_history": "清除历史记录",
+  "dark_mode": "切换到深色模式",
+  "light_mode": "切换到浅色模式",
   "location": {
     "button": "获取当前位置天气",
     "requesting": "正在获取位置信息...",

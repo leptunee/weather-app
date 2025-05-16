@@ -7,6 +7,7 @@ import LocationWeather from "./components/LocationWeather";
 import FavoritesList from "./components/FavoritesList";
 import { useWeatherHistory } from './hooks/useWeatherHistory';
 import { useFavorites } from './hooks/useFavorites';
+import DarkModeToggle from "./components/DarkModeToggle";
 
 function App() {
   const [city, setCity] = useState("");
@@ -34,6 +35,7 @@ function App() {
     <div className="min-h-screen relative bg-gradient-to-br from-blue-100 to-purple-200 dark:from-gray-900 dark:to-gray-800">
       <div className="fixed top-4 right-4 flex items-center gap-3">
         <LocationWeather onLocationWeather={handleLocationWeather} />
+        <DarkModeToggle />
         <LanguageToggle />
       </div>
       
