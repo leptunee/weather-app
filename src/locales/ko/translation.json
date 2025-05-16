@@ -1,0 +1,38 @@
+{
+  "app_title": "날씨 검색",
+  "search_placeholder": "도시 이름을 입력하세요",
+  "search_button": "검색",
+  "loading": "로딩 중...",
+  "error_not_found": "도시를 찾을 수 없습니다",
+  "temperature": "기온",
+  "humidity": "습도",
+  "wind_speed": "풍속",
+  "search_history": "검색 기록",
+  "clear_history": "기록 지우기",
+  "location": {
+    "button": "현재 위치 날씨 가져오기",
+    "requesting": "위치 정보를 가져오는 중...",
+    "permission_needed": "위치 권한이 필요합니다",
+    "error": "위치 정보를 가져올 수 없습니다",
+    "not_supported": "브라우저가 위치 서비스를 지원하지 않습니다"
+  },
+  "cities": {
+    "beijing": "베이징",
+    "shanghai": "상하이",
+    "guangzhou": "광저우",
+    "shenzhen": "선전",
+    "hangzhou": "항저우",
+    "chengdu": "청두",
+    "nanjing": "난징",
+    "wuhan": "우한",
+    "xian": "시안",
+    "tianjin": "톈진",
+    "chongqing": "충칭",
+    "suzhou": "쑤저우",
+    "qingdao": "칭다오",
+    "dalian": "다롄",
+    "xiamen": "샤먼",
+    "shenyang": "선양",
+    "changsha": "창사"
+  }
+}

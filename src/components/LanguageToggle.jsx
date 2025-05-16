@@ -25,8 +25,11 @@ const LanguageToggle = () => {
   };
 
   const languages = [
-    { code: 'zh', label: '简体中文' },
-    { code: 'en', label: 'English' }
+    { code: 'zh', label: '简体中文', icon: '🇨🇳' },
+    { code: 'zh-TW', label: '繁體中文', icon: '🇹🇼' },
+    { code: 'ja', label: '日本語', icon: '🇯🇵' },
+    { code: 'ko', label: '한국어', icon: '🇰🇷' },
+    { code: 'en', label: 'English', icon: '🇺🇸' }
   ];
 
   return (
@@ -59,30 +62,31 @@ const LanguageToggle = () => {
       {isOpen && (
         <div
           ref={dropdownRef}
-          className="absolute top-full right-0 mt-2 w-36 py-1
+          className="absolute top-full right-0 mt-2 w-40 py-1
                    bg-white dark:bg-gray-800 rounded-lg shadow-lg
                    border border-gray-100 dark:border-gray-700
                    backdrop-blur-lg animate-fade-in z-50"
         >
-          {languages.map(({ code, label }) => (
+          {languages.map(({ code, label, icon }) => (
             <button
               key={code}
               onClick={() => handleLanguageChange(code)}
               className={`w-full px-4 py-2 text-sm text-left
-                       transition-colors duration-150 ease-in-out
+                       transition-colors duration-150 ease-in-out flex items-center gap-3
                        ${code === i18n.language
                          ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400'
                          : 'text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700/50'
                        }`}
             >
-              <div className="flex items-center gap-2">
-                <span>{label}</span>
-                {code === i18n.language && (
-                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                  </svg>
-                )}
-              </div>
+              <span className="text-base" role="img" aria-label={code}>
+                {icon}
+              </span>
+              <span>{label}</span>
+              {code === i18n.language && (
+                <svg className="w-4 h-4 ml-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                </svg>
+              )}
             </button>
           ))}
         </div>
