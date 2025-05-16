@@ -47,14 +47,9 @@ const LocationWeather = ({ onLocationWeather }) => {
       <button
         onClick={handleGetLocation}
         disabled={isRequesting}
-        className="group p-3 bg-white/80 dark:bg-gray-800/80 backdrop-blur
-                 hover:bg-white dark:hover:bg-gray-700 text-blue-600 dark:text-blue-400 rounded-full
-                 transition-all duration-300 ease-in-out transform hover:scale-110
-                 shadow-lg hover:shadow-xl active:scale-95
-                 border border-blue-100 dark:border-blue-900
-                 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+        className="btn-icon btn-icon-disabled group"
       >
-        <div className="w-6 h-6 flex items-center justify-center group-hover:animate-pulse">
+        <div className="btn-icon-content">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             className="w-5 h-5"
@@ -78,7 +73,11 @@ const LocationWeather = ({ onLocationWeather }) => {
         </div>
       </button>
       {error && (
-        <div className="absolute top-full mt-2 -left-1/2 transform -translate-x-1/2 bg-red-500 text-white text-sm py-1 px-2 rounded shadow-lg whitespace-nowrap">
+        <div className="absolute top-full mt-2 -left-1/2 transform -translate-x-1/2
+                      bg-red-500 dark:bg-red-600
+                      text-white text-sm py-1 px-2 
+                      rounded shadow-lg 
+                      whitespace-nowrap">
           {error}
         </div>
       )}

@@ -78,119 +78,108 @@ const WeatherCard = ({ city, coords, favorites = [], onToggleFavorite }) => {
     return () => clearInterval(intervalId);
   }, [fetchWeatherData]);
 
-  if (loading) {
-    return (
-      <div className="animate-pulse bg-white/30 dark:bg-white/10 backdrop-blur p-6 rounded-xl shadow-lg">
-        <div className="h-6 bg-gray-200 dark:bg-gray-700 rounded w-2/3 mb-4"></div>
-        <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-1/2 mb-2"></div>
-        <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-1/3"></div>
-        <p className="text-center text-gray-600 dark:text-gray-400">{t('loading')}</p>
-      </div>
-    );
-  }
+  const isFavorite = favorites?.some(f => f.name === weatherData?.name);
 
-  if (error) {
-    return (
-      <div className="bg-red-100 dark:bg-red-900/30 backdrop-blur p-6 rounded-xl shadow-lg">
-        <p className="text-red-600 dark:text-red-400">{t('error_not_found')}</p>
-      </div>
-    );
-  }
-  if (!weatherData) return null;
-  const { 
-    name, 
-    main: { temp, humidity }, 
-    weather: [{ description, icon, main: weatherMain }], 
-    wind: { speed },
-    sys: { sunrise, sunset }
-  } = weatherData;
-  
-  // 判断当前是否是夜间
-  const isNight = () => {
-    const currentTime = Math.floor(Date.now() / 1000); // 转换为 Unix 时间戳（秒）
-    return currentTime < sunrise || currentTime > sunset;
-  };
-  
-  // 获取城市显示名称
-  const getCityDisplayName = (cityName) => {
-    if (!cityName) return name;
-    const lowercaseCity = cityName.toLowerCase();
-    const translatedName = t(`cities.${lowercaseCity}`, { defaultValue: '' });
-    return translatedName || name;
-  };
-
-  // 检查是否已收藏
-  const isFavorite = favorites?.some(f => f.name === name);
-
-  const cityDisplayName = getCityDisplayName(city);
-  const nightModeClass = isNight() 
-    ? 'bg-gray-900/40 text-gray-100' 
-    : 'bg-white/30 dark:bg-white/10 text-gray-800 dark:text-white';
-  const theme = getWeatherTheme(weatherMain, isNight());
-  return (    <div className={`relative overflow-hidden backdrop-blur p-6 rounded-xl shadow-lg ${theme.transition}`}>
-      {/* 动态渐变背景 */}
-      <div className={`absolute inset-0 bg-gradient-to-br ${theme.gradient} opacity-${theme.opacity} ${theme.transition}`}></div>
-      
-      {/* 内容区域 */}
-      <div className="relative z-10">
-        <div className="flex items-center justify-between mb-4">
-          <div className="flex items-start gap-2">          
-            <div>
-              <h2 className={`text-xl font-semibold ${theme.textColor} ${theme.transition}`}>
-                {cityDisplayName}
+  return (
+    <div className="weather-card">
+      {loading ? (
+        <div className="flex items-center justify-center h-32">
+          <div className="animate-spin rounded-full h-8 w-8 border-4 border-primary-500 border-t-transparent"></div>
+        </div>
+      ) : error ? (
+        <div className="text-center text-red-500 dark:text-red-400 py-4">
+          {error}
+        </div>
+      ) : weatherData && (
+        <>
+          <div className="flex justify-between items-start">
+            <div className="flex items-start gap-2">
+              <h2 className="text-2xl font-bold gradient-text">
+                {weatherData.name}
               </h2>
-              <p className={`text-sm mt-1 ${theme.accentColor} ${theme.transition}`}>
-                {getCurrentDate()}
-              </p>
-            </div>
-            <button
-              onClick={() => onToggleFavorite?.({
-                name,
-                temp,
-                humidity,
-                description,
-                icon,
-                speed,
-                timestamp: Date.now()
-              })}
-              className={`p-1.5 rounded-full transition-all duration-300 transform 
-                         hover:scale-110 active:scale-95
-                         ${isFavorite 
-                           ? 'text-yellow-500 hover:text-yellow-600 animate-bounce-once' 
-                           : 'text-gray-400 hover:text-yellow-500 hover:animate-pulse'}`}
-              title={isFavorite ? t('remove_from_favorites') : t('add_to_favorites')}
-            >
-              <svg 
-                viewBox="0 0 24 24" 
-                fill={isFavorite ? "currentColor" : "none"}
-                stroke="currentColor" 
-                className="w-6 h-6"
-                strokeWidth={isFavorite ? "0" : "2"}
+              <button
+                onClick={() => onToggleFavorite(weatherData)}
+                className="mt-1"
+                title={isFavorite ? t('remove_from_favorites') : t('add_to_favorites')}
               >
-                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
-              </svg>
-            </button>
-          </div>          <div className={`bg-white/20 p-1 rounded-full shadow-md backdrop-blur ${theme.transition}`}>
-            <img 
-              src={`https://openweathermap.org/img/wn/${icon}@2x.png`}
-              alt={description}
-              className="w-14 h-14"
-            />
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-5 w-5 text-yellow-500"
+                  fill={isFavorite ? 'currentColor' : 'none'}
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"
+                  />
+                </svg>
+              </button>
+            </div>
+            <span className="text-sm text-text-secondary">
+              {getCurrentDate()}
+            </span>
           </div>
-        </div>
-        <div className="space-y-2">
-          <p className={`text-3xl font-bold ${theme.textColor} ${theme.transition}`}>
-            {temp.toFixed(1)}°C
-          </p>
-          <p className={`${theme.accentColor} ${theme.transition}`}>
-            {description}
-          </p>
-          <div className={`grid grid-cols-2 gap-2 text-sm ${theme.accentColor} ${theme.transition}`}>
-            <p>{t('humidity')}: {humidity}%</p>
-            <p>{t('wind_speed')}: {speed} m/s</p>
+
+          <div className="flex flex-col gap-4 mt-4">
+            {/* 天气图标和主要信息 */}
+            <div className="flex items-center gap-4">
+              <img
+                src={`https://openweathermap.org/img/wn/${weatherData.weather[0].icon}@2x.png`}
+                alt={weatherData.weather[0].description}
+                className="w-20 h-20"
+              />
+              <div>
+                <div className="text-4xl font-bold gradient-text">
+                  {Math.round(weatherData.main.temp)}°
+                </div>
+                <div className="text-text-secondary capitalize">
+                  {weatherData.weather[0].description}
+                </div>
+              </div>
+            </div>
+
+            {/* 详细信息 */}
+            <div className="grid grid-cols-3 gap-4 mt-2">
+              {/* 湿度 */}
+              <div className="flex items-center gap-2">
+                <div className="rounded-full p-2 bg-blue-500/10 dark:bg-blue-500/20">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-blue-500" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 22c4.97 0 9-3.657 9-8.167C21 7.654 12 2 12 2S3 7.654 3 13.833C3 18.343 7.03 22 12 22z" />
+                  </svg>
+                </div>
+                <span className="text-lg font-medium">{weatherData.main.humidity}%</span>
+              </div>
+
+              {/* 风速 */}
+              <div className="flex items-center gap-2">
+                <div className="rounded-full p-2 bg-cyan-500/10 dark:bg-cyan-500/20">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-cyan-500" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.59 4.59A2 2 0 1111 8H2m10.59 11.41A2 2 0 1014 16H2m15.73-8.27A2.5 2.5 0 1119.5 12H2" />
+                  </svg>
+                </div>
+                <span className="text-lg font-medium">{Math.round(weatherData.wind.speed)}<span className="text-sm ml-1">m/s</span></span>
+              </div>
+
+              {/* 气压 */}
+              <div className="flex items-center gap-2">
+                <div className="rounded-full p-2 bg-violet-500/10 dark:bg-violet-500/20">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-violet-500" viewBox="0 0 24 24" fill="none">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} stroke="currentColor" 
+                      d="M12 4v2m0 12v2M4 12h2m12 0h2m-3.172-6.828l1.414-1.414M7.758 16.242l1.414-1.414m0-9.656L7.758 3.758M16.242 16.242l1.414 1.414M12 15a3 3 0 100-6 3 3 0 000 6z" />
+                  </svg>
+                </div>
+                <div className="text-lg font-medium leading-none">
+                  {Math.round(weatherData.main.pressure)}
+                  <span className="text-sm ml-1">hPa</span>
+                </div>
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
+        </>
+      )}
     </div>
   );
 };

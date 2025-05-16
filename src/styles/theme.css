@@ -1,0 +1,329 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --color-bg-primary: 240 249 255;
+    --color-bg-secondary: 226 232 240;
+    --color-text-primary: 30 41 59;
+    --color-text-secondary: 71 85 105;
+    --color-primary: 14 165 233;
+    --color-primary-light: 56 189 248;
+  }
+
+  .dark {
+    --color-bg-primary: 15 23 42;
+    --color-bg-secondary: 30 41 59;
+    --color-text-primary: 226 232 240;
+    --color-text-secondary: 148 163 184;
+    --color-primary: 56 189 248;
+    --color-primary-light: 125 211 252;
+  }
+}
+
+@layer components {
+  .btn-icon {
+    position: relative;
+    padding: 0.75rem;
+    background-color: rgb(255 255 255 / 0.8);
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+    color: rgb(2 132 199);
+    border-radius: 9999px;
+    transition-property: all;
+    transition-duration: 300ms;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+    box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+    border: 1px solid rgb(224 242 254);
+  }
+
+  .btn-icon:hover {
+    --tw-scale-x: 1.1;
+    --tw-scale-y: 1.1;
+    transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+    background-color: rgb(255 255 255);
+    box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1);
+  }
+
+  .btn-icon:active {
+    --tw-scale-x: 0.95;
+    --tw-scale-y: 0.95;
+    transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+  }
+
+  .dark .btn-icon {
+    background-color: rgb(31 41 55 / 0.8);
+    color: rgb(56 189 248);
+    border-color: rgb(30 58 138);
+  }
+
+  .dark .btn-icon:hover {
+    background-color: rgb(55 65 81);
+  }
+
+  .btn-icon-content {
+    width: 1.5rem;
+    height: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .group:hover .btn-icon-content {
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+
+  .btn-icon[disabled] {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+  }
+
+  .card {
+    background-color: rgb(255 255 255 / 0.3);
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgb(255 255 255 / 0.3);
+    border-radius: 0.75rem;
+    box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+    transition: all 500ms cubic-bezier(0.4, 0, 0.2, 1);
+    padding: 1.5rem;
+  }
+
+  .dark .card {
+    background-color: rgb(31 41 55 / 0.2);
+    border-color: rgb(255 255 255 / 0.1);
+  }
+
+  .input {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border-radius: 0.5rem;
+    background-color: rgb(255 255 255 / 0.7);
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgb(229 231 235);
+    color: rgb(31 41 55);
+    transition: all 300ms cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .input::placeholder {
+    color: rgb(107 114 128);
+  }
+
+  .dark .input {
+    background-color: rgb(31 41 55 / 0.7);
+    border-color: rgb(75 85 99);
+    color: rgb(243 244 246);
+  }
+
+  .dark .input::placeholder {
+    color: rgb(156 163 175);
+  }
+
+  .input:focus {
+    outline: none;
+    --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
+    --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(2px + var(--tw-ring-offset-width)) rgb(56 189 248 / 0.5);
+    box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow);
+  }
+
+  .gradient-text {
+    background-image: linear-gradient(to right, rgb(2 132 199), rgb(56 189 248));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .dark .gradient-text {
+    background-image: linear-gradient(to right, rgb(56 189 248), rgb(186 230 253));
+  }
+  .dropdown {
+    position: absolute;
+    z-index: 10;
+    width: 100%;
+    margin-top: 0.5rem;
+    background-color: rgb(255 255 255);
+    border: 1px solid rgb(229 231 235);
+    border-radius: 0.75rem;
+    box-shadow: 0 10px 25px -5px rgb(0 0 0 / 0.15);
+    overflow: hidden;
+  }
+
+  .dropdown-header {
+    padding: 0.75rem 1rem;
+    background-color: rgb(249 250 251);
+    border-bottom: 1px solid rgb(229 231 235);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .dropdown-header-title {
+    font-size: 0.875rem;
+    color: rgb(107 114 128);
+    font-weight: 500;
+  }
+
+  .dropdown-header-action {
+    font-size: 0.75rem;
+    color: rgb(239 68 68);
+    transition: all 150ms;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.375rem;
+  }
+
+  .dropdown-header-action:hover {
+    background-color: rgb(254 242 242);
+    color: rgb(185 28 28);
+  }
+
+  .dropdown-list {
+    max-height: 16rem;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: rgb(209 213 219) transparent;
+  }
+
+  .dropdown-list::-webkit-scrollbar {
+    width: 0.25rem;
+  }
+
+  .dropdown-list::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .dropdown-list::-webkit-scrollbar-thumb {
+    background-color: rgb(209 213 219);
+    border-radius: 9999px;
+  }
+
+  .dropdown-item {
+    position: relative;
+    width: 100%;
+    padding: 0.875rem 1rem;
+    text-align: left;
+    color: rgb(55 65 81);
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    transition: all 150ms;
+    border-bottom: 1px solid rgb(243 244 246);
+  }
+
+  .dropdown-item:last-child {
+    border-bottom: none;
+  }
+
+  .dropdown-item-icon {
+    width: 1rem;
+    height: 1rem;
+    color: rgb(156 163 175);
+    flex-shrink: 0;
+  }
+
+  .dropdown-item-text {
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .dropdown-item:hover {
+    background-color: rgb(243 244 246);
+  }
+
+  .dark .dropdown {
+    background-color: rgb(31 41 55);
+    border-color: rgb(55 65 81);
+  }
+
+  .dark .dropdown-header {
+    background-color: rgb(31 41 55);
+    border-bottom-color: rgb(55 65 81);
+  }
+
+  .dark .dropdown-header-title {
+    color: rgb(156 163 175);
+  }
+
+  .dark .dropdown-header-action {
+    color: rgb(248 113 113);
+  }
+
+  .dark .dropdown-header-action:hover {
+    background-color: rgb(127 29 29 / 0.2);
+    color: rgb(252 165 165);
+  }
+
+  .dark .dropdown-list::-webkit-scrollbar-thumb {
+    background-color: rgb(75 85 99);
+  }
+
+  .dark .dropdown-item {
+    color: rgb(209 213 219);
+    border-bottom-color: rgb(55 65 81 / 0.5);
+  }
+
+  .dark .dropdown-item-icon {
+    color: rgb(156 163 175);
+  }
+
+  .dark .dropdown-item:hover {
+    background-color: rgb(55 65 81 / 0.5);
+  }
+
+  .weather-card {
+    position: relative;
+    overflow: hidden;
+    padding: 1.5rem;
+    border-radius: 1rem;
+    background-color: rgb(255 255 255 / 0.3);
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
+    box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+    transition: all 500ms cubic-bezier(0.4, 0, 0.2, 1);
+    border: 1px solid rgb(255 255 255 / 0.5);
+  }
+
+  .dark .weather-card {
+    background-color: rgb(31 41 55 / 0.2);
+    border-color: rgb(255 255 255 / 0.1);
+  }
+
+  .weather-card img {
+    filter: drop-shadow(0 4px 6px rgb(0 0 0 / 0.1));
+    transition: transform 300ms cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .weather-card img:hover {
+    transform: scale(1.1);
+  }
+
+  .weather-stat {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    background-color: rgb(255 255 255 / 0.1);
+    -webkit-backdrop-filter: blur(4px);
+    backdrop-filter: blur(4px);
+    transition: all 300ms cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .weather-stat:hover {
+    background-color: rgb(255 255 255 / 0.2);
+    transform: translateY(-2px);
+  }
+
+  .dark .weather-stat {
+    background-color: rgb(31 41 55 / 0.4);
+  }
+
+  .dark .weather-stat:hover {
+    background-color: rgb(31 41 55 / 0.6);
+  }
+}

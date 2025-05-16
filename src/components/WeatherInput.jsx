@@ -24,88 +24,17 @@ const SPECIAL_CITY_MAP = {
 
 function WeatherInput({ onSearch, searchHistory, onClearHistory }) {
   const [city, setCity] = useState("");
-  const [suggestions, setSuggestions] = useState([]);
-  const [showSuggestions, setShowSuggestions] = useState(false);
-  const [selectedIndex, setSelectedIndex] = useState(-1); // 添加选中项索引状态
+  const [isOpen, setIsOpen] = useState(false);
   const inputRef = useRef(null);
-  const suggestionsRef = useRef(null);
+  const dropdownRef = useRef(null);
   const { t } = useTranslation();
 
-  // 处理键盘事件
-  const handleKeyDown = (e) => {
-    if (!showSuggestions || suggestions.length === 0) return;
-
-    switch (e.key) {
-      case 'ArrowDown':
-        e.preventDefault(); // 防止光标移动
-        setSelectedIndex(prevIndex => 
-          prevIndex < suggestions.length - 1 ? prevIndex + 1 : prevIndex
-        );
-        break;
-      case 'ArrowUp':
-        e.preventDefault(); // 防止光标移动
-        setSelectedIndex(prevIndex => 
-          prevIndex > 0 ? prevIndex - 1 : -1
-        );
-        break;
-      case 'Enter':
-        e.preventDefault();
-        if (selectedIndex >= 0) {
-          handleSuggestionClick(suggestions[selectedIndex]);
-        }
-        break;
-      case 'Escape':
-        setShowSuggestions(false);
-        setSelectedIndex(-1);
-        break;
-      default:
-        break;
-    }
-  };
-
-  // 处理输入框点击
-  const handleInputClick = () => {
-    setSuggestions(searchHistory);
-    setShowSuggestions(true);
-    setSelectedIndex(-1); // 重置选中项
-  };
-
-  // 点击建议项时的处理
-  const handleSuggestionClick = (suggestion) => {
-    setCity(suggestion);
-    setShowSuggestions(false);
-    onSearch(suggestion);
-  };
-
-  // 处理输入框变化
-  const handleInputChange = (e) => {
-    const value = e.target.value;
-    setCity(value);
-    setSelectedIndex(-1); // 重置选中项
-    
-    if (!value.trim()) {
-      // 当输入框为空时，显示所有历史记录
-      setSuggestions(searchHistory);
-      setShowSuggestions(true);
-      return;
-    }
-
-    // 过滤历史记录中匹配的项
-    const matches = searchHistory.filter(item => 
-      item.toLowerCase().includes(value.toLowerCase()) ||
-      pinyin(item, { toneType: 'none' }).toLowerCase().includes(value.toLowerCase())
-    );
-    
-    setSuggestions(matches);
-    setShowSuggestions(true);
-  };
-
-  // 处理点击外部关闭建议框
+  // 处理点击外部关闭下拉框
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (suggestionsRef.current && !suggestionsRef.current.contains(event.target) &&
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target) &&
           inputRef.current && !inputRef.current.contains(event.target)) {
-        setShowSuggestions(false);
+        setIsOpen(false);
       }
     };
 
@@ -113,7 +42,14 @@ function WeatherInput({ onSearch, searchHistory, onClearHistory }) {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  const handleSubmit = (e) => {
+  // 处理输入框变化
+  const handleInputChange = (e) => {
+    const value = e.target.value;
+    setCity(value);
+  };
+
+  // 处理搜索
+  const handleSearch = (e) => {
     e.preventDefault();
     if (city.trim()) {
       const cityName = city.trim();
@@ -130,90 +66,104 @@ function WeatherInput({ onSearch, searchHistory, onClearHistory }) {
       }
       
       onSearch(searchTerm);
-      setCity("");
-      setShowSuggestions(false);
+      setIsOpen(false);
     }
   };
 
+  // 处理历史记录点击
+  const handleHistoryClick = (item) => {
+    setCity(item);
+    onSearch(item);
+    setIsOpen(false);
+  };
+
+  // 处理清除历史记录
+  const handleClearHistory = (e) => {
+    e.stopPropagation();
+    onClearHistory();
+    setIsOpen(false);
+  };
+
   return (
-    <form onSubmit={handleSubmit} className="mb-6">
-      <div className="flex gap-2">
-        <div className="relative flex-1">
+    <div className="relative">
+      <form onSubmit={handleSearch} className="relative">
+        <div className="relative">
           <input
             ref={inputRef}
             type="text"
             value={city}
             onChange={handleInputChange}
-            onKeyDown={handleKeyDown}
-            onClick={handleInputClick}            
+            onClick={() => setIsOpen(true)}
             placeholder={t('search_placeholder')}
-            className="w-full h-12 px-4 rounded-xl bg-white/60 dark:bg-white/10 backdrop-blur 
-                     border border-gray-300 dark:border-white/20 text-gray-800 dark:text-white
-                     focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+            className="input pr-24"
           />
-          
-          {/* 搜索建议下拉框 */}
-          {showSuggestions && suggestions.length > 0 && (
-            <div
-              ref={suggestionsRef}
-              className="absolute z-10 w-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg mt-1"
+          <div className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-2">
+            {searchHistory.length > 0 && (
+              <button
+                type="button"
+                onClick={() => setIsOpen(!isOpen)}
+                className="p-2 text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300"
+                title={t('search_history')}
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
+              </button>
+            )}
+            <button
+              type="submit"
+              className="btn-icon !p-2"
             >
-              <div className="flex justify-between items-center px-4 py-2 border-b border-gray-200 dark:border-gray-700">
-                <span className="text-sm text-gray-500 dark:text-gray-400">{t('search_history')}</span>
-                <button
-                  type="button"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    onClearHistory();
-                    setSuggestions([]);
-                    setShowSuggestions(false);
-                  }}
-                  className="text-sm text-blue-500 hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-300"
-                >
-                  {t('clear_history')}
-                </button>
-              </div>
-              {suggestions.map((suggestion, index) => (
-                <div
-                  key={index}
-                  onClick={() => handleSuggestionClick(suggestion)}
-                  className={`px-4 py-2 cursor-pointer text-left text-gray-800 dark:text-white
-                    ${index === selectedIndex ? 
-                      'bg-gray-100 dark:bg-gray-700' : 
-                      'hover:bg-gray-50 dark:hover:bg-gray-700'
-                    }`}
-                >
-                  {suggestion}
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-        <button
-          type="submit"
-          className="group p-3 bg-white/80 dark:bg-gray-800/80 backdrop-blur
-                   hover:bg-white dark:hover:bg-gray-700 text-blue-600 dark:text-blue-400 rounded-full
-                   transition-all duration-300 ease-in-out transform hover:scale-110
-                   shadow-lg hover:shadow-xl active:scale-95
-                   border border-blue-100 dark:border-blue-900"
-          title={t('search_button')}
-        >
-          <div className="w-6 h-6 flex items-center justify-center group-hover:animate-pulse">
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              strokeWidth="2.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="w-5 h-5 stroke-current"
-            >
-              <path d="M21 21l-4.35-4.35" />
-              <circle cx="11" cy="11" r="8" />
-            </svg>
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              </svg>
+            </button>
           </div>
-        </button>
-      </div>
-    </form>
+        </div>
+      </form>
+
+      {/* 历史记录下拉框 */}
+      {isOpen && searchHistory.length > 0 && (
+        <div ref={dropdownRef} className="dropdown">
+          <div className="dropdown-header">
+            <span className="dropdown-header-title">
+              {t('search_history')}
+            </span>
+            <button
+              onClick={handleClearHistory}
+              className="dropdown-header-action"
+            >
+              {t('clear_history')}
+            </button>
+          </div>
+          <div className="dropdown-list">
+            {searchHistory.map((item, index) => (
+              <button
+                key={index}
+                className="dropdown-item"
+                onClick={() => handleHistoryClick(item)}
+              >
+                <svg 
+                  xmlns="http://www.w3.org/2000/svg" 
+                  className="dropdown-item-icon" 
+                  fill="none" 
+                  viewBox="0 0 24 24" 
+                  stroke="currentColor"
+                >
+                  <path 
+                    strokeLinecap="round" 
+                    strokeLinejoin="round" 
+                    strokeWidth={1.5} 
+                    d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" 
+                  />
+                </svg>
+                <span className="dropdown-item-text">{item}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
   );
 }
 
