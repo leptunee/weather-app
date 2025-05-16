@@ -1,5 +1,8 @@
 {
   "app_title": "Weather App",
+  "add_to_favorites": "Add to favorites",
+  "remove_from_favorites": "Remove from favorites",
+  "favorites_list": "Favorite Cities",
   "search_placeholder": "Enter a city...",
   "search_button": "Search",
   "loading": "Loading...",

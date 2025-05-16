@@ -1,5 +1,8 @@
 {
   "app_title": "天气查询",
+  "add_to_favorites": "添加到收藏",
+  "remove_from_favorites": "从收藏中移除",
+  "favorites_list": "收藏城市",
   "search_placeholder": "请输入城市名（国内城市支持中文）",
   "search_button": "查询",
   "loading": "加载中...",

@@ -1,5 +1,8 @@
 {
   "app_title": "天氣查詢",
+  "add_to_favorites": "加入收藏",
+  "remove_from_favorites": "取消收藏",
+  "favorites_list": "收藏城市",
   "search_placeholder": "請輸入城市名稱（支持中文）",
   "search_button": "查詢",
   "loading": "加載中...",

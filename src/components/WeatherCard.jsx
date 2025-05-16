@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useWeatherHistory } from '../hooks/useWeatherHistory';
 import { useTranslation } from 'react-i18next';
 
-const WeatherCard = ({ city, coords }) => {
+const WeatherCard = ({ city, coords, favorites = [], onToggleFavorite }) => {
   const [weatherData, setWeatherData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -82,7 +82,6 @@ const WeatherCard = ({ city, coords }) => {
   }
 
   if (!weatherData) return null;
-
   const { name, main: { temp, humidity }, weather: [{ description, icon }], wind: { speed } } = weatherData;
   
   // 获取城市显示名称
@@ -93,14 +92,44 @@ const WeatherCard = ({ city, coords }) => {
     return translatedName || name;
   };
 
+  // 检查是否已收藏
+  const isFavorite = favorites?.some(f => f.name === name);
+
   const cityDisplayName = getCityDisplayName(city);
 
   return (
-    <div className="bg-white/30 dark:bg-white/10 backdrop-blur p-6 rounded-xl shadow-lg">
-      <div className="flex items-center justify-between mb-4">
-        <div>
-          <h2 className="text-xl font-semibold text-gray-800 dark:text-white">{cityDisplayName}</h2>
-          <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">{getCurrentDate()}</p>
+    <div className="bg-white/30 dark:bg-white/10 backdrop-blur p-6 rounded-xl shadow-lg">      <div className="flex items-center justify-between mb-4">
+        <div className="flex items-start gap-2">
+          <div>
+            <h2 className="text-xl font-semibold text-gray-800 dark:text-white">{cityDisplayName}</h2>
+            <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">{getCurrentDate()}</p>
+          </div>          <button
+            onClick={() => onToggleFavorite?.({
+              name,
+              temp,
+              humidity,
+              description,
+              icon,
+              speed,
+              timestamp: Date.now()
+            })}
+            className={`p-1.5 rounded-full transition-all duration-300 transform 
+                       hover:scale-110 active:scale-95
+                       ${isFavorite 
+                         ? 'text-yellow-500 hover:text-yellow-600 animate-bounce-once' 
+                         : 'text-gray-400 hover:text-yellow-500 hover:animate-pulse'}`}
+            title={isFavorite ? t('remove_from_favorites') : t('add_to_favorites')}
+          >
+            <svg 
+              viewBox="0 0 24 24" 
+              fill={isFavorite ? "currentColor" : "none"}
+              stroke="currentColor" 
+              className="w-6 h-6"
+              strokeWidth={isFavorite ? "0" : "2"}
+            >
+              <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+            </svg>
+          </button>
         </div>
         <div className="bg-white dark:bg-white/20 p-1 rounded-full shadow-md">
           <img 

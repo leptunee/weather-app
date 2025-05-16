@@ -4,12 +4,15 @@ import WeatherInput from "./components/WeatherInput";
 import WeatherCard from "./components/WeatherCard";
 import LanguageToggle from "./components/LanguageToggle";
 import LocationWeather from "./components/LocationWeather";
+import FavoritesList from "./components/FavoritesList";
 import { useWeatherHistory } from './hooks/useWeatherHistory';
+import { useFavorites } from './hooks/useFavorites';
 
 function App() {
   const [city, setCity] = useState("");
   const [coords, setCoords] = useState(null);
   const { history, addToHistory, clearHistory } = useWeatherHistory();
+  const { favorites, addFavorite, removeFavorite, updateFavorite } = useFavorites();
   const { t } = useTranslation();
 
   const handleSearch = (input) => {
@@ -44,10 +47,24 @@ function App() {
             searchHistory={history}
             onClearHistory={handleClearHistory}
           />
+          <FavoritesList 
+            favorites={favorites}
+            onSelect={handleSearch}
+            onRemove={removeFavorite}
+          />
           {(city || coords) && (
             <WeatherCard 
               city={city} 
               coords={coords}
+              favorites={favorites}
+              onToggleFavorite={(cityData) => {
+                const isFavorite = favorites.some(f => f.name === cityData.name);
+                if (isFavorite) {
+                  removeFavorite(cityData.name);
+                } else {
+                  addFavorite(cityData);
+                }
+              }}
             />
           )}
         </div>
