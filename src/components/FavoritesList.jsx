@@ -16,7 +16,7 @@ import {
 import { SortableItem } from './SortableItem';
 
 const FavoritesList = ({ favorites, onSelect, onRemove, onReorder }) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -24,6 +24,7 @@ const FavoritesList = ({ favorites, onSelect, onRemove, onReorder }) => {
       coordinateGetter: sortableKeyboardCoordinates,
     })
   );
+  // 收藏列表组件的核心拖拽功能
 
   const handleDragEnd = (event) => {
     const { active, over } = event;

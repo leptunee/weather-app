@@ -82,12 +82,22 @@ export function useFavorites() {
     });
   }, []);
 
-  // 重新排序收藏城市
-  const reorderFavorites = useCallback((oldIndex, newIndex) => {
+  // 重新排序收藏城市，支持更新数据
+  const reorderFavorites = useCallback((oldIndex, newIndex, newData = null) => {
     setFavorites(prev => {
-      const newFavorites = [...prev];
-      const [movedItem] = newFavorites.splice(oldIndex, 1);
-      newFavorites.splice(newIndex, 0, movedItem);
+      let newFavorites;
+      
+      if (oldIndex === newIndex && newData) {
+        // 如果位置相同且有新数据，则更新该城市的数据
+        newFavorites = prev.map((city, index) => 
+          index === oldIndex ? { ...city, ...newData } : city
+        );
+      } else {
+        // 否则执行重新排序
+        newFavorites = [...prev];
+        const [movedItem] = newFavorites.splice(oldIndex, 1);
+        newFavorites.splice(newIndex, 0, movedItem);
+      }
 
       // 保存到 localStorage
       try {

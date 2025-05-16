@@ -1,7 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useWeatherHistory } from '../hooks/useWeatherHistory';
 import { useTranslation } from 'react-i18next';
 import { getWeatherTheme } from '../utils/weatherTheme';
+
+const REFRESH_INTERVAL = 300000; // 5分钟自动刷新一次
 
 const WeatherCard = ({ city, coords, favorites = [], onToggleFavorite }) => {
   const [weatherData, setWeatherData] = useState(null);
@@ -22,7 +24,8 @@ const WeatherCard = ({ city, coords, favorites = [], onToggleFavorite }) => {
     return now.toLocaleDateString(i18n.language === 'zh' ? 'zh-CN' : 'en-US', options);
   };
 
-  useEffect(() => {
+  // 获取天气数据的函数
+  const fetchWeatherData = useCallback(async () => {
     if (!city && !coords) return;
     
     setLoading(true);
@@ -45,23 +48,35 @@ const WeatherCard = ({ city, coords, favorites = [], onToggleFavorite }) => {
 
     const apiUrl = `${baseUrl}?${params.toString()}`;
     
-    fetch(apiUrl)
-      .then(response => {
-        if (!response.ok) {
-          throw new Error(t('error_not_found'));
-        }
-        return response.json();
-      })
-      .then(data => {
-        setWeatherData(data);
-        if (city) {
-          addToHistory(city);
-        }
-      })
-      .catch(err => setError(err.message))
-      .finally(() => setLoading(false));
-
+    try {
+      const response = await fetch(apiUrl);
+      if (!response.ok) {
+        throw new Error(t('error_not_found'));
+      }
+      const data = await response.json();
+      setWeatherData(data);
+      if (city) {
+        addToHistory(city);
+      }
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
   }, [city, coords, i18n.language, t, addToHistory]);
+
+  // 初始加载和语言变化时获取数据
+  useEffect(() => {
+    fetchWeatherData();
+  }, [fetchWeatherData]);
+
+  // 设置自动刷新
+  useEffect(() => {
+    const intervalId = setInterval(fetchWeatherData, REFRESH_INTERVAL);
+    
+    // 清理函数
+    return () => clearInterval(intervalId);
+  }, [fetchWeatherData]);
 
   if (loading) {
     return (
