@@ -27,7 +27,39 @@ function WeatherInput({ onSearch, searchHistory, onClearHistory }) {
   const [isOpen, setIsOpen] = useState(false);
   const inputRef = useRef(null);
   const dropdownRef = useRef(null);
+  const listRef = useRef(null);
   const { t } = useTranslation();
+
+  // 键盘导航相关
+  const [highlightIndex, setHighlightIndex] = useState(-1);
+
+  // 监听键盘事件
+  useEffect(() => {
+    if (!isOpen) return;
+    const handleKeyDown = (e) => {
+      if (!searchHistory.length) return;
+      if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        setHighlightIndex(idx => (idx + 1) % searchHistory.length);
+      } else if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        setHighlightIndex(idx => (idx - 1 + searchHistory.length) % searchHistory.length);
+      } else if (e.key === 'Enter') {
+        if (highlightIndex >= 0 && highlightIndex < searchHistory.length) {
+          handleHistoryClick(searchHistory[highlightIndex]);
+        }
+      } else if (e.key === 'Escape') {
+        setIsOpen(false);
+      }
+    };
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen, searchHistory, highlightIndex]);
+
+  // 打开下拉时重置高亮
+  useEffect(() => {
+    if (isOpen) setHighlightIndex(-1);
+  }, [isOpen, searchHistory]);
 
   // 处理点击外部关闭下拉框
   useEffect(() => {
@@ -41,6 +73,17 @@ function WeatherInput({ onSearch, searchHistory, onClearHistory }) {
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
+
+  // 处理历史记录滚动到高亮项
+  useEffect(() => {
+    if (!isOpen || highlightIndex < 0) return;
+    const list = listRef.current;
+    if (!list) return;
+    const item = list.children[highlightIndex];
+    if (item) {
+      item.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+    }
+  }, [highlightIndex, isOpen]);
 
   // 处理输入框变化
   const handleInputChange = (e) => {
@@ -136,12 +179,13 @@ function WeatherInput({ onSearch, searchHistory, onClearHistory }) {
               {t('clear_history')}
             </button>
           </div>
-          <div className="dropdown-list">
+          <div className="dropdown-list hide-scrollbar" ref={listRef}>
             {searchHistory.map((item, index) => (
               <button
                 key={index}
-                className="dropdown-item"
+                className={`dropdown-item${highlightIndex === index ? ' bg-sky-100 dark:bg-sky-700' : ''}`}
                 onClick={() => handleHistoryClick(item)}
+                tabIndex={-1}
               >
                 <svg 
                   xmlns="http://www.w3.org/2000/svg" 
