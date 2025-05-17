@@ -12,7 +12,7 @@ i18n
     resources: {
       en: { translation: en },
       zh: { translation: zh },
-      'zh-TW': { translation: zhTW },
+      'zh-HK': { translation: zhHK },
       ja: { translation: ja },
       ko: { translation: ko }
     },
