@@ -35,10 +35,10 @@ function App() {
   useEffect(() => {
     const updateFavoriteWeather = async (cityName) => {
       try {
-        const baseUrl = 'https://api.openweathermap.org/data/2.5/weather';
+        const baseUrl = import.meta.env.VITE_OPENWEATHER_BASE_URL;
         const params = new URLSearchParams({
           q: cityName,
-          appid: 'd9248032030562dee7f8a5c9500ae2ab',
+          appid: import.meta.env.VITE_OPENWEATHER_API_KEY,
           units: 'metric',
           lang: i18n.language === 'zh' ? 'zh_cn' : 'en'
         });
