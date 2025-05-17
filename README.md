@@ -24,6 +24,15 @@
 
 ## 快速开始
 
+### 环境变量配置
+
+1. 复制 `.env.example` 文件为 `.env`
+2. 获取 OpenWeather API 密钥: [https://openweathermap.org/api](https://openweathermap.org/api)
+3. 在 `.env` 中添加你的 API 密钥:
+```env
+VITE_OPENWEATHER_API_KEY=your_api_key_here
+```
+
 ### 安装依赖
 
 ```bash
@@ -48,6 +57,10 @@ npm run build
 npm run preview
 ```
 
+## 截图示例
+
+![主界面截图](/public/screenshot.png)
+
 ## 项目结构
 
 ```
@@ -70,6 +83,10 @@ src/
   ├── utils/             # 工具函数
   └── assets/            # 静态资源
 ```
+
+## License
+
+Distributed under the MIT License. See `LICENSE` for more information.
 
 ---
 
@@ -99,6 +116,15 @@ A modern weather query application built with React and Vite, supporting multipl
 
 ## Quick Start
 
+### Environment Variables
+
+1. Copy `.env.example` to `.env`
+2. Get OpenWeather API key: [https://openweathermap.org/api](https://openweathermap.org/api)
+3. Add your API key to `.env`:
+```env
+VITE_OPENWEATHER_API_KEY=your_api_key_here
+```
+
 ### Install Dependencies
 
 ```bash
@@ -122,6 +148,10 @@ npm run build
 ```bash
 npm run preview
 ```
+
+## Screenshots
+
+![Main Interface](/public/screenshot.png)
 
 ## Project Structure
 
