@@ -2,7 +2,7 @@ import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import en from './locales/en/translation.json';
 import zh from './locales/zh/translation.json';
-import zhTW from './locales/zh-TW/translation.json';
+import zhHK from './locales/zh-HK/translation.json';
 import ja from './locales/ja/translation.json';
 import ko from './locales/ko/translation.json';
 
