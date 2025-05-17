@@ -166,7 +166,7 @@ const WeatherCard = ({ city, coords, favorites = [], onToggleFavorite }) => {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 22c4.97 0 9-3.657 9-8.167C21 7.654 12 2 12 2S3 7.654 3 13.833C3 18.343 7.03 22 12 22z" />
                   </svg>
                 </div>
-                <span className="text-lg font-medium text-text-primary">{weatherData.main.humidity}%</span>
+                <span className={`text-lg font-medium text-text-primary ${theme ? theme.accentColor : 'text-text-secondary'}`}>{weatherData.main.humidity}%</span>
               </div>
 
               {/* 风速 */}
@@ -176,7 +176,7 @@ const WeatherCard = ({ city, coords, favorites = [], onToggleFavorite }) => {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.59 4.59A2 2 0 1111 8H2m10.59 11.41A2 2 0 1014 16H2m15.73-8.27A2.5 2.5 0 1119.5 12H2" />
                   </svg>
                 </div>
-                <span className="text-lg font-medium text-text-primary">
+                <span className={`text-lg font-medium text-text-primary ${theme ? theme.accentColor : 'text-text-secondary'}`}>
                   {Math.round(weatherData.wind.speed)}<span className={`text-sm ml-1 ${theme ? theme.accentColor : 'text-text-secondary'}`}>m/s</span>
                 </span>
               </div>
@@ -193,7 +193,7 @@ const WeatherCard = ({ city, coords, favorites = [], onToggleFavorite }) => {
                     <circle cx="12" cy="12" r="6" stroke="none" fill="currentColor" mask="url(#pointer)"/>
                   </svg>
                 </div>
-                <div className="text-lg font-medium leading-none text-text-primary">
+                <div className={`text-lg font-medium text-text-primary ${theme ? theme.accentColor : 'text-text-secondary'}`}>
                   {Math.round(weatherData.main.pressure)}
                   <span className={`text-sm ml-1 ${theme ? theme.accentColor : 'text-text-secondary'}`}>hPa</span>
                 </div>

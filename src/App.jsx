@@ -73,10 +73,12 @@ function App() {
 
   return (
     <div className="min-h-screen relative bg-bg-primary dark:bg-bg-secondary">
-      <div className="fixed top-4 right-4 flex items-center gap-3 z-10">
-        <LocationWeather onLocationWeather={handleLocationWeather} />
-        <DarkModeToggle />
-        <LanguageToggle />
+      <div className="flex justify-end p-4">
+        <div className="flex items-center gap-3">
+          <LocationWeather onLocationWeather={handleLocationWeather} />
+          <DarkModeToggle />
+          <LanguageToggle />
+        </div>
       </div>
       
       <div className="min-h-screen flex items-center justify-center p-6">
