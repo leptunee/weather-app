@@ -26,7 +26,7 @@ const LanguageToggle = () => {
 
   const languages = [
     { code: 'zh', label: '简体中文', icon: '🇨🇳' },
-    { code: 'zh-TW', label: '繁體中文', icon: '🇹🇼' },
+    { code: 'zh-HK', label: '繁體中文', icon: '🇭🇰' },
     { code: 'ja', label: '日本語', icon: '🇯🇵' },
     { code: 'ko', label: '한국어', icon: '🇰🇷' },
     { code: 'en', label: 'English', icon: '🇺🇸' }
