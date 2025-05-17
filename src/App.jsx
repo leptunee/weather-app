@@ -88,6 +88,7 @@ function App() {
             searchHistory={history}
             onClearHistory={handleClearHistory}
           />
+          <div className="h-2 sm:h-3" /> {/* 增加输入框和收藏列表间距 */}
           <FavoritesList 
             favorites={favorites}
             onSelect={handleSearch}
