@@ -2,6 +2,11 @@
 
 一个基于 React 和 Vite 构建的现代化天气查询应用，支持多语言、位置定位、城市收藏等功能。
 
+## 项目地址
+
+- 仓库：[https://github.com/leptunee/weather-app](https://github.com/leptunee/weather-app)
+- 部署：[https://appleweather.vercel.app/](https://appleweather.vercel.app/)
+
 ## 功能特点
 
 - 🌍 支持多语言（简体中文、繁体中文、日语、韩语、英语）
