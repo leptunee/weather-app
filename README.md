@@ -65,6 +65,7 @@ npm run preview
 ## 截图示例
 
 ![主界面截图](/public/screenshot.png)
+![手机界面截图](/public/screenshot2.jpg)
 
 ## 项目结构
 
