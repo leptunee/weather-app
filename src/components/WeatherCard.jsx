@@ -89,7 +89,7 @@ const WeatherCard = ({ city, coords, favorites = [], onToggleFavorite }) => {
   }
 
   return (
-    <div className={`weather-card rounded-xl shadow-lg p-6 mt-6 mb-4 transition-all duration-500 bg-gradient-to-br ${theme ? theme.gradient : 'from-sky-100 to-blue-200'} bg-opacity-${theme ? theme.opacity : '80'} ${theme ? theme.textColor : 'text-sky-900'}`}> 
+    <div className={`weather-card rounded-xl shadow-lg p-4 sm:p-3 mt-4 mb-4 transition-all duration-500 bg-gradient-to-br ${theme ? theme.gradient : 'from-sky-100 to-blue-200'} bg-opacity-${theme ? theme.opacity : '80'} ${theme ? theme.textColor : 'text-sky-900'} overflow-hidden max-w-full`}>
       {loading ? (
         <div className="flex items-center justify-center h-32">
           <div className="animate-spin rounded-full h-8 w-8 border-4 border-primary-500 border-t-transparent"></div>
@@ -100,13 +100,15 @@ const WeatherCard = ({ city, coords, favorites = [], onToggleFavorite }) => {
         </div>
       ) : weatherData && (
         <>
-          <div className="flex justify-between items-start">
-            <div className="flex items-start gap-2">
-              <h2 className={`text-2xl font-bold ${theme ? theme.accentColor : 'text-sky-600 dark:text-sky-300'}`}> 
-                {weatherData.name}
-              </h2>
-            </div>
-            <div className="flex flex-col items-end gap-1">
+          {/* 顶部信息栏 */}
+          <div className="flex justify-between items-center">
+            <h2 className={`text-xl sm:text-lg font-bold ${theme ? theme.accentColor : 'text-sky-600 dark:text-sky-300'} truncate max-w-[60%]`}>
+              {weatherData.name}
+            </h2>
+            <div className="flex items-center space-x-2">
+              <span className={`text-sm ${theme ? theme.accentColor : 'text-text-secondary'}`}>
+                {getCurrentDate()}
+              </span>
               <button
                 onClick={() => onToggleFavorite({
                   name: weatherData.name,
@@ -117,12 +119,11 @@ const WeatherCard = ({ city, coords, favorites = [], onToggleFavorite }) => {
                 })}
                 className={`p-1 rounded-full transition ${isFavorite ? 'bg-white/20' : 'bg-white/10 hover:bg-white/20'}`}
                 title={isFavorite ? t('remove_from_favorites') : t('add_to_favorites')}
-                style={{marginBottom: 2}}
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 24 24"
-                  className={`h-6 w-6 transition-all duration-200 ${isFavorite ? 'text-white' : 'text-white/70 hover:text-white'}`}
+                  className={`h-5 w-5 transition-all duration-200 ${isFavorite ? 'text-white' : 'text-white/70 hover:text-white'}`}
                   fill={isFavorite ? 'currentColor' : 'none'}
                   stroke="currentColor"
                   strokeWidth="2"
@@ -134,56 +135,53 @@ const WeatherCard = ({ city, coords, favorites = [], onToggleFavorite }) => {
                   />
                 </svg>
               </button>
-              <span className={`text-sm ${theme ? theme.accentColor : 'text-text-secondary'}`}> {/* 日期字体色 */}
-                {getCurrentDate()}
-              </span>
             </div>
           </div>
 
           <div className="flex flex-col gap-4 mt-4">
             {/* 天气图标和主要信息 */}
-            <div className="flex items-center gap-4">
+            {/* 主要天气信息 */}
+            <div className="flex flex-col items-center space-y-2 py-2">
               <img
                 src={`https://openweathermap.org/img/wn/${weatherData.weather[0].icon}@2x.png`}
                 alt={weatherData.weather[0].description}
-                className="w-20 h-20"
+                className="w-16 h-16 sm:w-14 sm:h-14"
               />
-              <div>                <div className={`text-4xl font-bold ${theme ? theme.accentColor : 'text-sky-600 dark:text-sky-300'}`}>
-                  {Math.round(weatherData.main.temp)}°
-                </div>
-                <div className={`capitalize ${theme ? theme.accentColor : 'text-text-secondary'}`}> 
-                  {weatherData.weather[0].description}
-                </div>
+              <div className={`text-4xl sm:text-3xl font-bold ${theme ? theme.accentColor : 'text-sky-600 dark:text-sky-300'}`}>
+                {Math.round(weatherData.main.temp)}°
+              </div>
+              <div className={`capitalize text-lg sm:text-base ${theme ? theme.accentColor : 'text-text-secondary'}`}>
+                {weatherData.weather[0].description}
               </div>
             </div>
 
             {/* 详细信息 */}
-            <div className="grid grid-cols-3 gap-4 mt-2">
-              {/* 湿度 */}
-              <div className="flex items-center gap-2">
-                <div className={`rounded-full p-2 ${theme ? 'bg-white/30' : 'bg-blue-500/10 dark:bg-blue-500/20'}`}> {/* 图标底色更亮 */}
+            {/* 天气详情 */}
+            <div className="grid grid-cols-3 gap-2 sm:gap-1 pt-2 border-t border-white/10">
+              <div className="flex flex-col items-center">
+                <div className={`rounded-full p-2 ${theme ? 'bg-white/30' : 'bg-blue-500/10 dark:bg-blue-500/20'}`}>
                   <svg xmlns="http://www.w3.org/2000/svg" className={`h-5 w-5 ${theme ? 'text-white drop-shadow' : 'text-blue-500'}`} viewBox="0 0 24 24" fill="none" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 22c4.97 0 9-3.657 9-8.167C21 7.654 12 2 12 2S3 7.654 3 13.833C3 18.343 7.03 22 12 22z" />
                   </svg>
                 </div>
-                <span className={`text-lg font-medium text-text-primary ${theme ? theme.accentColor : 'text-text-secondary'}`}>{weatherData.main.humidity}%</span>
+                <span className={`text-sm sm:text-xs mt-1 ${theme ? theme.accentColor : 'text-text-secondary'}`}>
+                  {weatherData.main.humidity}%
+                </span>
               </div>
 
-              {/* 风速 */}
-              <div className="flex items-center gap-2">
-                <div className={`rounded-full p-2 ${theme ? 'bg-white/30' : 'bg-cyan-500/10 dark:bg-cyan-500/20'}`}> {/* 图标底色更亮 */}
+              <div className="flex flex-col items-center">
+                <div className={`rounded-full p-2 ${theme ? 'bg-white/30' : 'bg-cyan-500/10 dark:bg-cyan-500/20'}`}>
                   <svg xmlns="http://www.w3.org/2000/svg" className={`h-5 w-5 ${theme ? 'text-white drop-shadow' : 'text-cyan-500'}`} viewBox="0 0 24 24" fill="none" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.59 4.59A2 2 0 1111 8H2m10.59 11.41A2 2 0 1014 16H2m15.73-8.27A2.5 2.5 0 1119.5 12H2" />
                   </svg>
                 </div>
-                <span className={`text-lg font-medium text-text-primary ${theme ? theme.accentColor : 'text-text-secondary'}`}>
-                  {Math.round(weatherData.wind.speed)}<span className={`text-sm ml-1 ${theme ? theme.accentColor : 'text-text-secondary'}`}>m/s</span>
+                <span className={`text-sm sm:text-xs mt-1 ${theme ? theme.accentColor : 'text-text-secondary'}`}>
+                  {Math.round(weatherData.wind.speed)} m/s
                 </span>
               </div>
 
-              {/* 气压 */}
-              <div className="flex items-center gap-2">
-                <div className={`rounded-full p-2 ${theme ? 'bg-white/30' : 'bg-violet-500/10 dark:bg-violet-500/20'}`}> {/* 图标底色更亮 */}
+              <div className="flex flex-col items-center">
+                <div className={`rounded-full p-2 ${theme ? 'bg-white/30' : 'bg-violet-500/10 dark:bg-violet-500/20'}`}>
                   <svg xmlns="http://www.w3.org/2000/svg" className={`h-5 w-5 ${theme ? 'text-white drop-shadow' : 'text-violet-500'}`} viewBox="0 0 24 24">
                     <mask id="pointer">
                       <rect x="0" y="0" width="24" height="24" fill="white" />
@@ -193,10 +191,9 @@ const WeatherCard = ({ city, coords, favorites = [], onToggleFavorite }) => {
                     <circle cx="12" cy="12" r="6" stroke="none" fill="currentColor" mask="url(#pointer)"/>
                   </svg>
                 </div>
-                <div className={`text-lg font-medium text-text-primary ${theme ? theme.accentColor : 'text-text-secondary'}`}>
-                  {Math.round(weatherData.main.pressure)}
-                  <span className={`text-sm ml-1 ${theme ? theme.accentColor : 'text-text-secondary'}`}>hPa</span>
-                </div>
+                <span className={`text-sm sm:text-xs mt-1 ${theme ? theme.accentColor : 'text-text-secondary'}`}>
+                  {Math.round(weatherData.main.pressure)} hPa
+                </span>
               </div>
             </div>
           </div>
